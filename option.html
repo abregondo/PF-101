@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JaKim Kiosk</title>
+  <style>
+    * {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f5f5f5;
+  color: #333;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.screen {
+  display: none; 
+  width: 100%;
+  max-width: 1000px;
+}
+
+.screen.active {
+  display: block; 
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 18px;
+  margin: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #d32f2f;
+  color: white;
+}
+
+/* Menu Grid */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .menu-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Menu Cards */
+.menu-card {
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu-card h4 {
+  margin: 5px 0;
+  font-size: 1.1em;
+}
+
+.menu-card p {
+  margin: 5px 0;
+  color: #444;
+}
+#start-screen {
+  text-align: center;        
+  margin-top: 45vh;           
+  transform: translateY(-50%); 
+  width: 100%;               
+}
+
+button {
+  margin-top: 20px;           
+
+}
+#mode-screen {
+  text-align: center;        
+  margin-top: 45vh;           
+  transform: translateY(-50%); 
+  width: 100%;               
+}
+
+button {
+  margin-top: 20px;           
+
+}
+#menu-screen {
+  text-align: center;
+  margin-top: 20px;
+  width: 100%;
+}
+
+
+
+
+
+/* Quantity Control */
+.qty-control {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.qty-control button {
+  background-color: #ddd;
+  border: none;
+  padding: 5px 10px;
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.qty-number {
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+.add-to-cart {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 1em;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.add-to-cart:hover {
+  background-color: #388e3c;
+}
+
+/* Order Summary */
+.order-summary {
+  background: #fff;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.order-item-name {
+  flex: 2;
+}
+
+.order-item-controls {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Receipt Screen */
+.receipt-screen {
+  text-align: center;
+  padding: 30px;
+  background-color: #fff5f5;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: none; 
+}
+
+.receipt-screen.active {
+  display: flex; 
+}
+
+.receipt-screen h2 {
+  font-size: 32px;
+  color: #d72323;
+  margin-bottom: 20px;
+}
+
+.receipt-box {
+  margin: 0 auto;
+  background-color: #fff;
+  border: 2px solid #d72323;
+  border-radius: 12px;
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.receipt-box div {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 16px;
+}
+
+.receipt-box div:last-child {
+  border-bottom: none;
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.receipt-box strong {
+  color: #d72323;
+}
+
+.btn-finish {
+  margin-top: 25px;
+  padding: 12px 24px;
+  font-size: 18px;
+  color: white;
+  background-color: #d72323;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-finish:hover {
+  background-color: #a31111;
+}
+@media (max-width: 768px) {
+  #start-screen, #mode-screen, #menu-screen {
+    margin-top: 250px;
+  }
+
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 10px;
+  }
+
+  #menu-screen button {
+    font-size: 16px;
+    padding: 12px;
+    margin: 5px;
+    width: 100%; 
+  }
+
+  #menu-screen h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+
+  .menu-card {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .menu-card h4 {
+    font-size: 1em; 
+  }
+
+  .menu-card .add-to-cart {
+    width: 100%; 
+  }
+
+  button {
+    font-size: 16px;
+    padding: 12px 16px;
+  }
+
+  #menu-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  #menu-screen button {
+    margin-bottom: 10px;
+  }
+
+  .order-summary {
+    padding: 15px;
+    margin-top: 10px;
+  }
+
+  .order-item-name {
+    font-size: 14px;
+  }
+
+  .receipt-box {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .receipt-box div {
+    font-size: 14px;
+  }
+
+  .btn-finish {
+    padding: 12px 24px;
+    font-size: 18px;
+  }
+}
+
+
+
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="start-screen" class="screen active">
+      <h1>Start</h1>
+      <button onclick="showScreen('mode-screen')">Start Order</button>
+    </div>
+
+    <div id="mode-screen" class="screen">
+        <h2>Select Mode</h2>
+        <button onclick="setOrderType('Dine-In')">Dine-In</button>
+        <button onclick="setOrderType('Take-Out')">Take-Out</button>
+      </div>
+      
+
+    <div id="menu-screen" class="screen">
+      <h2>Select a Menu</h2>
+      <div>
+        <button onclick="loadMenu('meals')">Meals</button>
+        <button onclick="loadMenu('drinks')">Drinks</button>
+        <button onclick="loadMenu('desserts')">Desserts</button>
+        <button onclick="loadMenu('add-ons')">Add-Ons</button>
+      </div>
+      <div id="menu-items" class="menu-grid"></div>
+      <button onclick="showOrderSummary()">Review Order</button>
+      <button onclick="checkout()">Checkout</button>
+    </div>
+
+    <div id="order-summary-screen" class="screen">
+        <h2>Review Order</h2>
+        <div id="order-summary" class="order-summary"></div>
+        <button id="back-to-menu-btn" onclick="showScreen('menu-screen')">Back to Menu</button>
+        <button id="proceed-btn" onclick="proceedToPayment()" style="display:none;">Proceed</button>
+      </div>
+
+      <div id="payment-screen" class="screen">
+        <h2>Select Payment Method</h2>
+        <button onclick="selectPaymentMethod('cash')">Cash</button>
+        <button onclick="selectPaymentMethod('gcash')">GCash</button>
+        <button onclick="selectPaymentMethod('bank')">Bank </button>
+        <button onclick="selectPaymentMethod('bank')">Visa </button>
+
+        <button onclick="goBackToOrder()">Back to Order</button>
+      </div>
+      <div id="receipt-screen" class="screen receipt-screen">
+        <h2>Receipt</h2>
+        <div id="receipt-details" class="receipt-box"></div>
+        <h2>Please proceed to the cashier for payment.</h2>
+        <button onclick="location.reload()" class="btn-finish">Done</button>
+      </div>
+      
+  
+
+  
+      
+  </div>
+
+  <script>
+    let selectedPaymentMethod = null;
+    let orderType = null; 
+  
+    function setOrderType(type) {
+      orderType = type;
+      showScreen('menu-screen');
+    }
+  
+    // Function to handle the payment method selection
+    function selectPaymentMethod(method) {
+      selectedPaymentMethod = method;
+      alert("You have selected " + method + " as your payment method.");
+  
+      showReceipt(); 
+    }
+  
+    function showReceipt() {
+      const receiptDiv = document.getElementById('receipt-details');
+      receiptDiv.innerHTML = '';
+  
+      let total = 0;
+      cart.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.innerHTML = `${item.name} (₱${item.price}) x ${item.quantity}`;
+        receiptDiv.appendChild(itemDiv);
+        total += item.price * item.quantity;
+      });
+  
+      const totalDiv = document.createElement('div');
+      totalDiv.innerHTML = `<strong>Total: ₱${total.toFixed(2)}</strong>`;
+      const paymentDiv = document.createElement('div');
+      paymentDiv.innerHTML = `<strong>Payment Method:</strong> ${selectedPaymentMethod}`;
+      const modeDiv = document.createElement('div');
+      modeDiv.innerHTML = `<strong>Order Type:</strong> ${orderType}`;
+  
+      receiptDiv.appendChild(totalDiv);
+      receiptDiv.appendChild(paymentDiv);
+      receiptDiv.appendChild(modeDiv);
+  
+      showScreen('receipt-screen');
+    }
+  
+    function goBackToOrder() {
+      showScreen('order-summary-screen');
+    }
+  
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+  
+    const menuItems = {
+      meals: [
+      { name: 'Burger Steak', price: 79, image: 'Burger-Steak.jpg' },
+    { name: 'Chickenjoy', price: 99, image: 'Chickenjoy.jpg' },
+    { name: 'Jolly Spaghetti', price: 60, image: 'Spag.jpg' },
+    { name: 'Burger Deluxe', price: 89, image: 'Burger.jpg' },
+    { name: 'Palabok Fiesta', price: 99, image: 'palabok.jpg' },
+    { name: 'Super Meal', price: 129, image: 'Super.webp' },
+    { name: 'Yumburger', price: 49, image: 'yum.jpg' },
+    { name: 'Jolly Hotdog', price: 59, image: 'Jolly-Hotdog.png' },
+    { name: 'Garlic Rice Meal', price: 75, image: 'Rice.jpg' },
+    { name: 'Breakfast Joys', price: 90, image: 'joy.jpg' }
+      ],
+      drinks: [
+        { name: 'Coke', price: 35, image:'coke.jpg' },
+        { name: 'Sprite', price: 35, image:'sprite.jpg' },
+        { name: 'Iced Tea', price: 40, image:'iced tea.jpg' },
+        { name: 'Pineapple Juice', price: 45, image:'pjuice.png' },
+        { name: 'Hot Choco', price: 50, image:'choco.png' },
+        { name: 'Coffee', price: 40, image:'coffee.jpg' },
+        { name: 'Mineral Water', price: 20, image:'water.jpg' },
+        { name: 'Float', price: 55, image:'float.jpg' },
+        { name: 'Milkshake', price: 65, image:'shake.jpg' }
+      ],
+      desserts: [
+        { name: 'Sundae', price: 45, image:'sundae.png' },
+        { name: 'Peach Mango Pie', price: 35, image:'peach.jpg' },
+        { name: 'Halo-Halo', price: 55, image:'halo.jpg' },
+        { name: 'Choco Float', price: 55, image:'chocof.jpg' },
+        { name: 'Vanilla Cone Twirl', price: 30, image:'twirl.jpg' },
+        { name: 'Choco Cone Twirl', price: 30, image:'chococonetwirl.jpg' }
+      ],
+      'add-ons': [
+        { name: 'Extra Rice', price: 25, image:'x-rice.jpg' },
+        { name: 'Gravy', price: 15, image:'gravy.jpg' },
+        { name: 'Regular Fries', price: 40, image:'regular.jpg' },
+        { name: 'Medium Fries', price: 40, image:'medium.png' },
+        { name: 'Large Fries', price: 40, image:'large.jpg' }
+      ]
+    };
+  
+    let cart = [];
+    const qtyData = {};
+  
+    function loadMenu(category) {
+  const menuDiv = document.getElementById('menu-items');
+  menuDiv.innerHTML = '';
+
+  menuItems[category].forEach((item, index) => {
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'menu-card';
+
+    itemDiv.innerHTML = `
+      <h4>${item.name}</h4>
+      <img src="${item.image}" alt="${item.name}" style="width: 120px; height: 120px; object-fit: cover; margin-bottom: 10px;">
+      <p>₱${item.price.toFixed(2)}</p>
+      <div class="qty-control">
+        <button onclick="updateQty('${category}', ${index}, -1)">-</button>
+        <span id="qty-${category}-${index}" class="qty-number">0</span>
+        <button onclick="updateQty('${category}', ${index}, 1)">+</button>
+      </div>
+      <button class="add-to-cart" onclick="addToCart('${category}', ${index})">Add to Cart</button>
+    `;
+
+    menuDiv.appendChild(itemDiv);
+  });
+}
+
+  
+    function proceedToPayment() {
+      showScreen('payment-screen');
+    }
+  
+    function updateQty(category, index, delta) {
+      const key = `${category}-${index}`;
+      qtyData[key] = (qtyData[key] || 0) + delta;
+      if (qtyData[key] < 0) qtyData[key] = 0;
+      document.getElementById(`qty-${category}-${index}`).innerText = qtyData[key];
+    }
+  
+    function addToCart(category, index) {
+      const key = `${category}-${index}`;
+      const quantity = qtyData[key] || 0;
+      if (quantity === 0) return;
+  
+      const item = menuItems[category][index];
+      const existing = cart.find(i => i.name === item.name);
+      if (existing) {
+        existing.quantity += quantity;
+      } else {
+        cart.push({ name: item.name, price: item.price, quantity });
+      }
+      qtyData[key] = 0;
+      document.getElementById(`qty-${category}-${index}`).innerText = '0';
+    }
+  
+    function checkout() {
+      const summary = document.getElementById('order-summary');
+      summary.innerHTML = '';
+      
+      let total = 0;
+      cart.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'order-item';
+        itemDiv.innerHTML = `${item.name} (₱${item.price}) x ${item.quantity}`;
+        summary.appendChild(itemDiv);
+        total += item.price * item.quantity;
+      });
+  
+      const totalDiv = document.createElement('div');
+      totalDiv.innerHTML = `<strong>Total: ₱${total.toFixed(2)}</strong>`;
+      summary.appendChild(totalDiv);
+  
+      document.getElementById('back-to-menu-btn').style.display = 'none';
+      document.getElementById('proceed-btn').style.display = 'inline-block';
+  
+      showScreen('order-summary-screen');
+    }
+  
+    function showOrderSummary() {
+      const summary = document.getElementById('order-summary');
+      summary.innerHTML = '';
+      let total = 0;
+  
+      cart.forEach((item, idx) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'order-item';
+        itemDiv.innerHTML = `
+          <div class="order-item-name">${item.name} (₱${item.price})</div>
+          <div class="order-item-controls">
+            <button onclick="changeQuantity(${idx}, -1)">-</button>
+            <span style="margin: 0 10px;">${item.quantity}</span>
+            <button onclick="changeQuantity(${idx}, 1)">+</button>
+          </div>
+        `;
+        summary.appendChild(itemDiv);
+        total += item.quantity * item.price;
+      });
+  
+      const totalDiv = document.createElement('div');
+      totalDiv.innerHTML = `<strong>Total: ₱${total.toFixed(2)}</strong>`;
+      totalDiv.style.marginTop = '20px';
+      summary.appendChild(totalDiv);
+  
+      document.getElementById('back-to-menu-btn').style.display = 'inline-block';
+      document.getElementById('proceed-btn').style.display = 'none';
+  
+      showScreen('order-summary-screen');
+    }
+  
+    function changeQuantity(index, delta) {
+      if (cart[index]) {
+        cart[index].quantity += delta;
+        if (cart[index].quantity <= 0) {
+          cart.splice(index, 1);
+        }
+        showOrderSummary();
+      }
+    }
+  </script>
+  
+</body>
+</html>
